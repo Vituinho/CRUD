@@ -1,2 +1,2 @@
-# Crud_CanalTI
-Um video ensinando a fazer um CRUD, com o PHP, MySQL & Bootstrap.
+# CRUD
+Estudos dedicados somente a CRUD, com PHP & MySQL.
