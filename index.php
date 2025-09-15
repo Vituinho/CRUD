@@ -9,7 +9,9 @@ require 'conexao.php';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Usuarios</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   </head>
   <body>
     <?php include('navbar.php'); ?>
@@ -50,11 +52,11 @@ require 'conexao.php';
                                     <td><?=$usuario['email']?></td>
                                     <td><?=date('d/m/Y', strtotime($usuario['data_nascimento']))?></td>
                                     <td>
-                                        <a href="usuario-view.php?id=<?=$usuario['id']?>" class="btn btn-secondary btn-sm">Visualizar</a>
-                                        <a href="usuario-edit.php?id=<?=$usuario['id']?>" class="btn btn-success btn-sm">Editar</a>
+                                        <a href="usuario-view.php?id=<?=$usuario['id']?>" class="btn btn-secondary btn-sm"><i class="bi bi-eye-fill"></i>&nbsp; Visualizar</a>
+                                        <a href="usuario-edit.php?id=<?=$usuario['id']?>" class="btn btn-success btn-sm"><i class="bi bi-pencil-fill"></i>&nbsp;Editar</a>
                                         <form action="acoes.php" method="POST" class="d-inline">
                                             <button onclick="return confirm('Tem certeza que deseja excluir?')" type="submit" name="delete_usuario" value="<?=$usuario['id']?>" class="btn btn-danger btn-sm">
-                                                Excluir
+                                                <i class="bi bi-trash-fill"></i>&nbsp;Excluir
                                             </button>
                                         </form>
                                     </td>
