@@ -62,7 +62,7 @@
                                         <a class="btn btn-primary" href="editar.php?id=<?= $produto['id'] ?>">
                                             <i class="bi bi-pencil-fill"></i>&nbsp;Editar
                                         </a>
-                                        <a class="btn btn-danger" href="excluir.php?id=<?= $produto['id'] ?>">
+                                        <a class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este produto?')";  href="excluir.php?id=<?= $produto['id'] ?>">
                                             <i class="bi bi-trash-fill"></i>&nbsp;Excluir
                                         </a>
                                     </td>
