@@ -18,7 +18,7 @@
                     session_start();
                     $_SESSION['id_usuario'] = $usuario['id'];
                     $_SESSION['nome_usuario'] = $usuario['nome'];
-                    header('Location: tarefas.php');
+                    header('Location: read.php');
                     exit;
                 }
             } else {
