@@ -3,26 +3,19 @@
     require 'conexao.php';
 
     session_start();
-    if (!isset($_SESSION['id_usuario'])) {
-        header('Location: cadastrar.php');
-        exit;
-    }
  
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $nome = $_POST['nome'];
         $email = $_POST['email'];
-        $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+        $senhaDigitada = $_POST['senha'];
 
-        $stmt = $conexao->prepare('SELECT id, senha FROM usuarios');
-        $stmt->bindValue(':nome', $nome);
+        $stmt = $conexao->prepare('SELECT id, senha FROM usuarios WHERE email = :email LIMIT 1');
         $stmt->bindValue(':email', $email);
-        $stmt->bindValue(':senha', $senha);
         $stmt->execute();
 
-        $resultado = $stmt->get_result();
-        $usuario = $resultado->fetch_assoc();
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($usuario && password_verify($senha, $usuario['senha'])) {
+        if ($usuario && password_verify($senhaDigitada, $usuario['senha'])) {
             $_SESSION['id_usuario'] = $usuario['id'];
             header('Location: home.php');
             exit;
