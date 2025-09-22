@@ -5,7 +5,6 @@
     session_start();
  
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
-        $nome = $_POST['nome'];
         $email = $_POST['email'];
         $senhaDigitada = $_POST['senha'];
 
@@ -55,10 +54,6 @@
                     </div>
                     <div class="card-body">
                         <form action="" method="POST">
-                            <div class="mb-5">
-                                <h5>Nome</h5>
-                                <input class="form-control" type="text" name="nome">
-                            </div>
                             <div class="mb-5">
                                 <h5>E-mail</h5>
                                 <input class="form-control" type="email" name="email">

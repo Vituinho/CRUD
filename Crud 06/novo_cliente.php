@@ -23,6 +23,9 @@
             $stmt->bindValue(':mensalidade', $mensalidade);
             $stmt->bindValue(':id_usuario', $id_usuario);
             $stmt->execute();
+
+            header('Location: home.php');
+            exit;
         }
 
     }
