@@ -8,6 +8,10 @@
         exit;
     }
 
+    $stmt = $conexao->prepare("SELECT * FROM clientes");
+    $stmt->execute();
+    $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <head>
@@ -33,8 +37,9 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="d-flex justify-content-center">
+                        <h5>
                             Home
+                            <a class="btn btn-primary float-right" href="novo_cliente.php">Adicionar</a>
                         </h5>
                     </div>
                     <div class="card-body">
@@ -44,16 +49,27 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Título</th>
-                                        <th>Status</th>
+                                        <th>Nome</th>
+                                        <th>Serviço</th>
+                                        <th>Mensalidade</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php foreach ($clientes as $cliente) {
+                                    ?>
                                     <tr>
-                                        <td></td>
+                                        <td><?=$cliente['id_cliente']?></td>
+                                        <td><?=$cliente['nome']?></td>
+                                        <td><?=$cliente['servico']?></td>
+                                        <td>R$ <?=$cliente['mensalidade']?></td>
+                                        <td>
+                                        <a href="editar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-pencil-fill"></i></a>
+                                        <a href="deletar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-trash-fill text-danger"></i></a>
+                                    </td>
                                     </tr>
                                 </tbody>
+                                <?php } ?>
                             </table>
                         </form>
                     </div>
