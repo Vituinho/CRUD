@@ -12,7 +12,7 @@
 
         if (!empty(trim($nome)) && !empty(trim($email) && !empty(trim($senha)))) {
 
-            $check = $conexao->prepare('SELECT id FROM usuarios WHERE email = :email LIMIT 1');
+            $check = $conexao->prepare('SELECT id_usuario FROM usuarios WHERE email = :email LIMIT 1');
             $check->bindValue(':email', $email);
             $check->execute();
 

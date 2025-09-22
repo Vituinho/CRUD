@@ -9,14 +9,14 @@
         $email = $_POST['email'];
         $senhaDigitada = $_POST['senha'];
 
-        $stmt = $conexao->prepare('SELECT id, senha FROM usuarios WHERE email = :email LIMIT 1');
+        $stmt = $conexao->prepare('SELECT id_usuario, senha FROM usuarios WHERE email = :email LIMIT 1');
         $stmt->bindValue(':email', $email);
         $stmt->execute();
 
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($usuario && password_verify($senhaDigitada, $usuario['senha'])) {
-            $_SESSION['id_usuario'] = $usuario['id'];
+            $_SESSION['id_usuario'] = $usuario['id_usuario'];
             header('Location: home.php');
             exit;
         } else {
