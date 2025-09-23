@@ -65,7 +65,8 @@
                                         <td>R$ <?=$cliente['mensalidade']?></td>
                                         <td>
                                         <a href="editar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-pencil-fill"></i></a>
-                                        <a href="deletar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-trash-fill text-danger"></i></a>
+
+                                        <a onclick="return confirm('Tem certeza que deseja excluir?')" href="deletar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-trash-fill text-danger"></i></a>
                                     </td>
                                     </tr>
                                 </tbody>
