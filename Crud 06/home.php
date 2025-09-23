@@ -108,7 +108,9 @@
                                             <td><?=$cliente['id_cliente']?></td>
                                             <td><?=$cliente['nome']?></td>
                                             <td><?=$cliente['servico']?></td>
-                                            <td>R$ <?=$cliente['mensalidade']?></td>
+                                            <td><?php $mensalidade = $cliente['mensalidade'];
+                                            $mensalidadeFormatada = "R$ " . number_format($mensalidade, 2, ',', '.'); echo $mensalidadeFormatada; ?>
+                                        </td>
                                             <td>
                                             <a href="editar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-pencil-fill"></i></a>
 
