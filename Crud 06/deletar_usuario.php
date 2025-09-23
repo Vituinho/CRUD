@@ -1,29 +1,32 @@
 <?php
+require 'conexao.php';
 
-    require 'conexao.php';
+session_start();
 
-    session_start();
-    if (!isset($_SESSION['id_usuario'])) {
-        header('Location: cadastrar.php');
-        exit;
-    }
+if (!isset($_SESSION['id_usuario'])) {
+    header('Location: cadastrar.php');
+    exit;
+}
 
-    $id_usuario = $_GET['id_usuario'] ?? null;
+$id_usuario = $_SESSION['id_usuario'];
 
-    if ($id_usuario === null) {
-        echo '<script>alert("Valor está nulo!");</script>';
-    } else {
+try {
 
-        $query = "DELETE FROM usuarios WHERE id_usuario = :id_usuario;";
+    $query = "DELETE FROM clientes WHERE id_usuario = :id_usuario";
+    $stmt = $conexao->prepare($query);
+    $stmt->bindValue(':id_usuario', $id_usuario);
+    $stmt->execute();
 
-        $stmt = $conexao->prepare($query);
-        $stmt->bindValue(':id_usuario', $id_usuario);
-        $stmt->execute();
+    $query = "DELETE FROM usuarios WHERE id_usuario = :id_usuario";
+    $stmt = $conexao->prepare($query);
+    $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
+    $stmt->execute();
 
-        session_destroy();
-        header('Location: cadastrar.php');
-        exit;
+    session_destroy();
+    header('Location: cadastrar.php');
+    exit;
 
-    }   
-
+} catch (PDOException $e) {
+    echo "Erro ao deletar: " . $e->getMessage();
+}
 ?>
