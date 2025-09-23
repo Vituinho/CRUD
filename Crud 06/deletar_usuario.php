@@ -21,7 +21,7 @@
         $stmt->execute();
 
         session_destroy();
-        header('Location: cadastro.php');
+        header('Location: cadastrar.php');
         exit;
 
     }   
