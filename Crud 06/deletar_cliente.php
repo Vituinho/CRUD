@@ -8,9 +8,9 @@
         exit;
     }
 
-    $id = $_GET['id'] ?? null;
+    $id_cliente = $_GET['id_cliente'] ?? null;
 
-    if ($id === null) {
+    if ($id_cliente === null) {
         echo '<script>alert("Valor está nulo!");</script>';
     } else {
         
