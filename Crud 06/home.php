@@ -8,9 +8,16 @@
         exit;
     }
 
-    $stmt = $conexao->prepare("SELECT * FROM clientes");
+    $id_usuario = $_SESSION['id_usuario'];
+
+    $stmt = $conexao->prepare("SELECT * FROM clientes WHERE id_usuario = :id_usuario;");
+    $stmt->bindValue(':id_usuario', $id_usuario).
     $stmt->execute();
     $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $conexao->prepare("SELECT * FROM usuarios");
+    $stmt->execute();
+    $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -38,42 +45,81 @@
                 <div class="card">
                     <div class="card-header">
                         <h5>
-                            Home
+                            Menu Usuários
+                            <a href="editar_usuario.php?id_usuario=<?=$_SESSION['id_usuario']?>" class="btn btn-info float-right">Configurações do Usuário</a>
+                        </h5>
+                        </div>
+                            <div class="card-body">
+                            <form action="" method="GET">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($usuarios as $usuario) {
+                                        ?>
+                                        <tr>
+                                            <td><?=$usuario['id_usuario']?></td>
+                                            <td><?=$usuario['nome']?></td>
+                                            <td><?=$usuario['email']?></td>
+                                        </tr>
+                                    </tbody>
+                                    <?php } ?>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>
+                            Clientes
                             <a class="btn btn-primary float-right" href="novo_cliente.php">Adicionar</a>
                         </h5>
                     </div>
-                    <div class="card-body">
                         <div class="card-body">
-                        <form action="" method="GET">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nome</th>
-                                        <th>Serviço</th>
-                                        <th>Mensalidade</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($clientes as $cliente) {
-                                    ?>
-                                    <tr>
-                                        <td><?=$cliente['id_cliente']?></td>
-                                        <td><?=$cliente['nome']?></td>
-                                        <td><?=$cliente['servico']?></td>
-                                        <td>R$ <?=$cliente['mensalidade']?></td>
-                                        <td>
-                                        <a href="editar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-pencil-fill"></i></a>
+                            <div class="card-body">
+                            <form action="" method="GET">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>Serviço</th>
+                                            <th>Mensalidade</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($clientes as $cliente) {
+                                        ?>
+                                        <tr>
+                                            <td><?=$cliente['id_cliente']?></td>
+                                            <td><?=$cliente['nome']?></td>
+                                            <td><?=$cliente['servico']?></td>
+                                            <td>R$ <?=$cliente['mensalidade']?></td>
+                                            <td>
+                                            <a href="editar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-pencil-fill"></i></a>
 
-                                        <a onclick="return confirm('Tem certeza que deseja excluir?')" href="deletar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-trash-fill text-danger"></i></a>
-                                    </td>
-                                    </tr>
-                                </tbody>
-                                <?php } ?>
-                            </table>
-                        </form>
-                    </div>
+                                            <a onclick="return confirm('Tem certeza que deseja excluir?')" href="deletar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-trash-fill text-danger"></i></a>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                    <?php } ?>
+                                </table>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
