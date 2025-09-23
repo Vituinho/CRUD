@@ -13,7 +13,16 @@
     if ($id_cliente === null) {
         echo '<script>alert("Valor está nulo!");</script>';
     } else {
-        
-    }
+
+        $query = "DELETE FROM clientes WHERE id_cliente = :id_cliente;";
+
+        $stmt = $conexao->prepare($query);
+        $stmt->bindValue(':id_cliente', $id_cliente);
+        $stmt->execute();
+
+        header('Location: home.php');
+        exit;
+
+    }   
 
 ?>

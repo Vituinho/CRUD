@@ -19,6 +19,33 @@
         $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $nome = $_POST['nome'];
+        $servico = $_POST['servico'];
+        $mensalidade = $_POST['mensalidade'];
+
+        if (!empty(trim($nome)) && !empty(trim($servico)) && !empty(trim($mensalidade)) && !empty(trim($id_cliente))) {
+            $query = "
+                UPDATE clientes
+                SET nome = :nome,
+                    servico = :servico,
+                    mensalidade = :mensalidade
+                where id_cliente = :id_cliente;
+            ";
+
+            $stmt = $conexao->prepare($query);
+            $stmt->bindValue(':nome', $nome);
+            $stmt->bindValue(':servico', $servico);
+            $stmt->bindValue(':mensalidade', $mensalidade);
+            $stmt->bindValue(':id_cliente', $id_cliente);
+            $stmt->execute();
+
+            header('Location: home.php');
+            exit;
+        }
+
+    }
+
 ?>
 
 <head>
@@ -53,15 +80,15 @@
                         <form action="" method="POST">
                             <div class="mb-5">
                                 <h5>Nome</h5>
-                                <input class="form-control" type="text" name="nome">
+                                <input class="form-control" type="text" name="nome" value="<?=$cliente['nome']?>">
                             </div>
                             <div class="mb-5">
                                 <h5>Serviço</h5>
-                                <input class="form-control" type="text" name="servico">
+                                <input class="form-control" type="text" name="servico" value="<?=$cliente['servico']?>">
                             </div>
                             <div class="mb-5">
                                 <h5>Mensalidade</h5>
-                                <input class="form-control" type="number" name="mensalidade">
+                                <input class="form-control" type="number" name="mensalidade" value="<?=$cliente['mensalidade']?>">
                             </div>
                             <button type="submit" class="btn btn-primary">Salvar</button>
                     
