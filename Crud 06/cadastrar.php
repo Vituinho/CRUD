@@ -4,13 +4,40 @@
 
     session_start();
 
+    function calcularForcaSenha($senhaUsuario) {
+        $forca = 0;
+
+        // 1. Comprimento mínimo (8+)
+        if(strlen($senhaUsuario) >= 8) $forca++;
+
+        // 2. Letra maiúscula
+        if(preg_match('/[A-Z]/', $senhaUsuario)) $forca++;
+
+        // 3. Número
+        if(preg_match('/[0-9]/', $senhaUsuario)) $forca++;
+
+        // 4. Símbolo especial
+        if(preg_match('/[^a-zA-Z0-9]/', $senhaUsuario)) $forca++;
+
+        // Retorna um valor de 0 a 4
+        return $forca;
+    }
+
+
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $nome = $_POST['nome'];
         $email = $_POST['email'];
-        $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+        $senhaUsuario = $_POST['senha'];
+        $forca = calcularForcaSenha($senhaUsuario);
+
+        if($forca <= 3) {
+            echo "<script>alert('Sua senha é muito fraca!');</script>";
+        } else {
+            $senha = password_hash($senhaUsuario, PASSWORD_DEFAULT);
+        }
         
 
-        if (!empty(trim($nome)) && !empty(trim($email) && !empty(trim($senha)))) {
+        if (!empty(trim($nome)) && !empty(trim($email) && !empty(trim($senhaUsuario)))) {
 
             $check = $conexao->prepare('SELECT id_usuario FROM usuarios WHERE email = :email LIMIT 1');
             $check->bindValue(':email', $email);
@@ -77,7 +104,9 @@
                             </div>
                             <div class="mb-5">
                                 <h5>Senha</h5>
-                                <input class="form-control" type="password" name="senha">
+                                <input class="form-control" type="password" name="senha" id="senha">
+                                <div id="barra-forca" style="width: 0%; height: 8px; background-color: red; margin-top: 5px;"></div>
+                                <span id="nivel-senha" style="font-weight: bold; margin-left: 5px;"></span>
                             </div>
                             <button type="submit" class="btn btn-primary">Cadastrar</button>
                             <a class="btn btn-danger" href="index.php">Voltar</a>
@@ -99,6 +128,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+
+    <script src="barra_texto.js"></script>
 </body>
 
 </html>
