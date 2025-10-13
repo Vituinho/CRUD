@@ -64,7 +64,7 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>ID_USUARIO</th>
                                             <th>Nome</th>
                                             <th>Email</th>
                                             <th>Perfil</th>
@@ -106,7 +106,7 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>ID_USUARIO</th>
                                             <th>Nome</th>
                                             <th>Serviço</th>
                                             <th>Mensalidade</th>
@@ -117,7 +117,7 @@
                                         <?php foreach ($clientes as $cliente) {
                                         ?>
                                         <tr>
-                                            <td><?=$cliente['id_cliente']?></td>
+                                            <td><?=$cliente['id_usuario']?></td>
                                             <td><?=$cliente['nome']?></td>
                                             <td><?=$cliente['servico']?></td>
                                             <td><?php $mensalidade = $cliente['mensalidade'];
