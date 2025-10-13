@@ -2,11 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let senhaInput = document.getElementById('senha');
     let barra = document.getElementById('barra-forca');
     let nivelTexto = document.getElementById('nivel-senha');
-    let seguranca = document.getElementById('seguranca');    
 
     senhaInput.addEventListener('input', () => {
 
-        let forca = calcularForca(senha);
+        let forca = calcularForca(senhaInput.value);
         atualizarBarra(forca);
     });
 
