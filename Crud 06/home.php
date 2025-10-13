@@ -3,6 +3,7 @@
     require 'conexao.php';
 
     session_start();
+
     if (!isset($_SESSION['id_usuario'])) {
         header('Location: cadastrar.php');
         exit;
@@ -18,7 +19,7 @@
         $stmt->bindValue(':id_usuario', $id_usuario);
         $stmt->execute();
         $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } elseif ($tipo_usuario === 'admin') {
+    } if ($tipo_usuario === 'admin') {
         $stmt = $conexao->prepare("SELECT * FROM clientes");
         $stmt->execute();
         $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
