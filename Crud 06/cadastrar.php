@@ -1,136 +1,115 @@
 <?php
+require 'conexao.php';
+session_start();
 
-    require 'conexao.php';
+function calcularForcaSenha($senhaUsuario) {
+    $forca = 0;
 
-    session_start();
+    if(strlen($senhaUsuario) >= 8) $forca++;
+    if(preg_match('/[A-Z]/', $senhaUsuario)) $forca++;
+    if(preg_match('/[0-9]/', $senhaUsuario)) $forca++;
+    if(preg_match('/[^a-zA-Z0-9]/', $senhaUsuario)) $forca++;
 
-    function calcularForcaSenha($senhaUsuario) {
-        $forca = 0;
+    return $forca; // 0 a 4
+}
 
-        // 1. Comprimento mínimo (8+)
-        if(strlen($senhaUsuario) >= 8) $forca++;
+$mensagem = '';
+$tipo = '';
 
-        // 2. Letra maiúscula
-        if(preg_match('/[A-Z]/', $senhaUsuario)) $forca++;
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $nome = $_POST['nome'];
+    $email = $_POST['email'];
+    $senhaUsuario = $_POST['senha'];
 
-        // 3. Número
-        if(preg_match('/[0-9]/', $senhaUsuario)) $forca++;
+    // 1. Verifica campos vazios
+    if(empty(trim($nome)) || empty(trim($email)) || empty(trim($senhaUsuario))){
+        $mensagem = 'Preencha todos os campos!';
+        $tipo = 'warning';
+    } 
+    // 2. Verifica força da senha
+    elseif(calcularForcaSenha($senhaUsuario) < 3){
+        $mensagem = 'Sua senha é muito fraca!';
+        $tipo = 'danger';
+    } 
+    else {
+        // 3. Verifica e-mail duplicado
+        $check = $conexao->prepare('SELECT id_usuario FROM usuarios WHERE email = :email LIMIT 1');
+        $check->bindValue(':email', $email);
+        $check->execute();
 
-        // 4. Símbolo especial
-        if(preg_match('/[^a-zA-Z0-9]/', $senhaUsuario)) $forca++;
-
-        // Retorna um valor de 0 a 4
-        return $forca;
-    }
-
-
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $nome = $_POST['nome'];
-        $email = $_POST['email'];
-        $senhaUsuario = $_POST['senha'];
-        $forca = calcularForcaSenha($senhaUsuario);
-
-        if($forca <= 3) {
-            echo "<script>alert('Sua senha é muito fraca!');</script>";
+        if($check->rowCount() > 0){
+            $mensagem = 'E-mail já está sendo utilizado!';
+            $tipo = 'danger';
         } else {
+            // 4. Tudo certo, cadastra
             $senha = password_hash($senhaUsuario, PASSWORD_DEFAULT);
+            $stmt = $conexao->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)");
+            $stmt->bindValue(':nome', $nome);
+            $stmt->bindValue(':email', $email);
+            $stmt->bindValue(':senha', $senha);        
+            $stmt->execute();
+
+            header('Location: home.php');
+            exit;
         }
-        
-
-        if (!empty(trim($nome)) && !empty(trim($email) && !empty(trim($senhaUsuario)))) {
-
-            $check = $conexao->prepare('SELECT id_usuario FROM usuarios WHERE email = :email LIMIT 1');
-            $check->bindValue(':email', $email);
-            $check->execute();
-
-            if ($check->rowCount() > 0) {
-                echo "<script>alert('E-mail já está sendo utilizado!');</script>";    
-            } else {
-                $stmt = $conexao->prepare("INSERT INTO usuarios (nome, email, senha) values (:nome, :email, :senha)");
-                $stmt->bindValue(':nome', $nome);
-                $stmt->bindValue(':email', $email);
-                $stmt->bindValue(':senha', $senha);        
-                $stmt->execute();
-
-                header('Location: home.php');
-                exit;
-            }
-            
-        } else {
-            echo "<script>alert('Preencha todos os campos!');</script>";
-        }
-
     }
-    
-
+}
 ?>
 
 <head>
-    <!-- Meta tags Obrigatórias -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
     <title>Cadastrar-se</title>
-
 </head>
 
 <body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="d-flex justify-content-center">Cadastrar-se</h5>
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST">
 
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="d-flex justify-content-center">
-                            Cadastrar-se
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <form action="" method="POST">
-                            <div class="mb-5">
-                                <h5>Nome</h5>
-                                <input class="form-control" type="text" name="nome">
+                        <?php if(!empty($mensagem)): ?>
+                            <div class="alert alert-<?= $tipo ?>" role="alert">
+                                <?= $mensagem ?>
                             </div>
-                            <div class="mb-5">
-                                <h5>E-mail</h5>
-                                <input class="form-control" type="email" name="email">
-                            </div>
-                            <div class="mb-5">
-                                <h5>Senha</h5>
-                                <input class="form-control" type="password" name="senha" id="senha">
-                                <div id="barra-forca" style="width: 0%; height: 8px; background-color: red; margin-top: 5px;"></div>
-                                <span id="nivel-senha" style="font-weight: bold; margin-left: 5px;"></span>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Cadastrar</button>
-                            <a class="btn btn-danger" href="index.php">Voltar</a>
-                        </form>
-                    </div>
+                        <?php endif; ?>
+
+                        <div class="mb-3">
+                            <h5>Nome</h5>
+                            <input class="form-control" type="text" name="nome">
+                        </div>
+                        <div class="mb-3">
+                            <h5>E-mail</h5>
+                            <input class="form-control" type="email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <h5>Senha</h5>
+                            <input class="form-control" type="password" name="senha" id="senha">
+                            <!-- Barra de força -->
+                            <div class="progress mt-2">
+                                    <div class="progress-bar" id="barra-forca" style="width:0%;"></div>
+                                </div>
+
+                            <span id="nivel-senha" style="font-weight:bold; margin-left:5px;">Muito Fraca</span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <a class="btn btn-danger" href="index.php">Voltar</a>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- JavaScript (Opcional) -->
-    <!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
+<script src="barra_texto.js"></script>
 
-    <script src="barra_texto.js"></script>
 </body>
-
 </html>
-

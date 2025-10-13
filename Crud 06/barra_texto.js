@@ -1,27 +1,36 @@
-let senhaInput = document.getElementById('senha');
-let barra = document.getElementById('barra-forca');
-let nivelTexto = document.getElementById('nivel-senha');
+document.addEventListener('DOMContentLoaded', () => {
+    let senhaInput = document.getElementById('senha');
+    let barra = document.getElementById('barra-forca');
+    let nivelTexto = document.getElementById('nivel-senha');
+    let seguranca = document.getElementById('seguranca');    
 
-senhaInput.addEventListener('input', () => {
-    let senha = senhaInput.value;
-    let forca = calcularForca(senha);
-    atualizarBarra(forca);
+    senhaInput.addEventListener('input', () => {
+
+        let forca = calcularForca(senha);
+        atualizarBarra(forca);
+    });
+
+    function calcularForca(senha) {
+        let forca = 0;
+
+        if (senha.length >= 8) forca++;
+        if (/[A-Z]/.test(senha)) forca++;
+        if (/[0-9]/.test(senha)) forca++;
+        if (/[^a-zA-Z0-9]/.test(senha)) forca++;
+        return forca; // 0 a 4
+    }
+
+    function atualizarBarra(forca) {
+        // Se a forca for 0, o nível também será 0
+        let cores = ['#e74c3c', '#e67e22', '#f1c40f', '#3498db', '#2ecc71'];
+        let niveis = ['Muito Fraca', 'Fraca', 'Média', 'Forte', 'Muito Forte'];
+
+        // Garante que o índice não exceda o array (embora forca seja de 0 a 4)
+        let indice = Math.min(forca, 4); 
+
+        barra.style.width = ((forca/4)*100) + '%';
+        barra.style.backgroundColor = cores[indice];
+        barra.style.transition = 'width 0.5s ease';
+        nivelTexto.textContent = niveis[indice];
+    }
 });
-
-function calcularForca(senha) {
-    let forca = 0;
-    if(senha.length >= 8) forca++;
-    if(/[A-Z]/.test(senha)) forca++;
-    if(/[0-9]/.test(senha)) forca++;
-    if(/[^a-zA-Z0-9]/.test(senha)) forca++;
-    return forca; // 0 a 4
-}
-
-function atualizarBarra(forca) {
-    let cores = ['#e74c3c','#e67e22','#f1c40f','#3498db','#2ecc71'];
-    let niveis = ['Muito Fraca', 'Fraca', 'Média', 'Forte', 'Muito Forte'];
-
-    barra.style.width = ((forca/4)*100) + '%';
-    barra.style.backgroundColor = cores[forca];
-    nivelTexto.textContent = niveis[forca];
-}
