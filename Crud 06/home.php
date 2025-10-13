@@ -9,11 +9,20 @@
     }
 
     $id_usuario = $_SESSION['id_usuario'];
+    $tipo_usuario = $_SESSION['tipo'];
 
-    $stmt = $conexao->prepare("SELECT * FROM clientes WHERE id_usuario = :id_usuario;");
-    $stmt->bindValue(':id_usuario', $id_usuario).
-    $stmt->execute();
-    $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $clientes = [];
+
+    if ($tipo_usuario === 'usuario') {
+        $stmt = $conexao->prepare("SELECT * FROM clientes WHERE id_usuario = :id_usuario;");
+        $stmt->bindValue(':id_usuario', $id_usuario);
+        $stmt->execute();
+        $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } elseif ($tipo_usuario === 'admin') {
+        $stmt = $conexao->prepare("SELECT * FROM clientes");
+        $stmt->execute();
+        $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     $stmt = $conexao->prepare("SELECT * FROM usuarios");
     $stmt->execute();
@@ -57,6 +66,7 @@
                                             <th>ID</th>
                                             <th>Nome</th>
                                             <th>Email</th>
+                                            <th>Perfil</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -66,9 +76,10 @@
                                             <td><?=$usuario['id_usuario']?></td>
                                             <td><?=$usuario['nome']?></td>
                                             <td><?=$usuario['email']?></td>
+                                            <td><?=$usuario['tipo']?></td>
                                         </tr>
-                                    </tbody>
                                     <?php } ?>
+                                    </tbody>
                                 </table>
                             </form>
                         </div>
@@ -117,8 +128,8 @@
                                             <a onclick="return confirm('Tem certeza que deseja excluir?')" href="deletar_cliente.php?id_cliente=<?= $cliente['id_cliente'] ?>"><i class="bi bi-trash-fill text-danger"></i></a>
                                         </td>
                                         </tr>
-                                    </tbody>
                                     <?php } ?>
+                                    </tbody>
                                 </table>
                             </form>
                         </div>

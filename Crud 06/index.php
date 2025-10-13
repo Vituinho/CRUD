@@ -16,6 +16,7 @@
 
         if ($usuario && password_verify($senhaDigitada, $usuario['senha'])) {
             $_SESSION['id_usuario'] = $usuario['id_usuario'];
+            $_SESSION['tipo'] = $usuario['tipo'];
             header('Location: home.php');
             exit;
         } else {
