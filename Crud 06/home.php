@@ -138,7 +138,9 @@
                 </div>
             </div>
         </div>
+        <a href="logout.php" class="w-25 ml-auto mr-auto rounded mt-3 d-flex justify-content-center btn btn-danger">Logout</a>
     </div>
+    
 
     <!-- JavaScript (Opcional) -->
     <!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
