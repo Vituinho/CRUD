@@ -5,8 +5,11 @@
 	require_once "../vendor/autoload.php";
 
 	$route = new \App\Route;
-	header('Location: /usuarios');
-	exit;
+	
+	if ($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] === '/index.php') {
+    header('Location: /usuarios');
+    exit;
+}
 	
 
 ?>
