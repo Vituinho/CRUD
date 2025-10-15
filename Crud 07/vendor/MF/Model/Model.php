@@ -1,16 +1,13 @@
 <?php
-
-
 namespace MF\Model;
 
-abstract class Model {
+use PDO;
 
-	protected $db;
+class Model {
 
-	public function __construct(\PDO $db) {
-		$this->db = $db;
-	}
+    protected PDO $db;
+
+    public function __construct(PDO $db) {
+        $this->db = $db;
+    }
 }
-
-
-?>
