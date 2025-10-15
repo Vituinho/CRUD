@@ -6,7 +6,7 @@ Para executar este projeto CRUD em seu computador, siga os passos abaixo:
 
 Abra o terminal e execute o seguinte comando para clonar o repositório:
 
-git clone https://github.com/Vituinho/CRUD.git
+`git clone https://github.com/Vituinho/CRUD.git`
 
 **2. Instalar o XAMPP**
 
