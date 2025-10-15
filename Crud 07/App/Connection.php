@@ -1,24 +1,40 @@
 <?php
-
 namespace App;
 
+use PDO;
+use PDOException;
+
 class Connection {
+    public static function getDb(): PDO {
+        $host = 'localhost';
+        $dbName = 'CRUD_POO';
+        $user = 'root';
+        $pass = '';
 
-	public static function getDb() {
-		try {
+        try {
+            // Conecta sem banco, pra criar se não existir
+            $conn = new PDO("mysql:host=$host", $user, $pass);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-			$conn = new \PDO(
-				"mysql:host=localhost;dbname=mvc;charset=utf8",
-				"root",
-				"" 
-			);
+            // Cria banco se não existir
+            $conn->exec("CREATE DATABASE IF NOT EXISTS $dbName CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
 
-			return $conn;
+            // Seleciona o banco
+            $conn->exec("USE $dbName");
 
-		} catch (\PDOException $e) {
-			//.. tratar de alguma forma ..//
-		}
-	}
+            // Cria a tabela usuarios se não existir
+            $conn->exec("CREATE TABLE IF NOT EXISTS usuarios (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                nome VARCHAR(100) NOT NULL,
+                email VARCHAR(100) NOT NULL,
+                senha VARCHAR(255) NOT NULL
+            )");
+
+            return $conn;
+
+        } catch (PDOException $e) {
+            echo "Erro ao conectar/criar banco: " . $e->getMessage();
+            exit;
+        }
+    }
 }
-
-?>
