@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class tasks extends Model
+class Tasks extends Model
 {
-    //
+    protected $fillable = ['titulo', 'descricao', 'status'];
 }
