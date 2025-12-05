@@ -31,7 +31,17 @@ class TasksController extends Controller
      */
     public function store(TasksRequest $request)
     {
-        dd('Passou');
+        $tasks = Tasks::create([
+            'title' => $request['title'],
+            'description' => $request['description'],
+            'status' => $request['status']
+        ]);
+
+        if($tasks) {
+            return redirect()->route('tasks.index')->with('success', 'Tarefa cadastrado com sucesso!');
+        } else {
+            return redirect()->route('tasks.index')->with('error', 'Não foi possível cadastrar a tarefa!');
+        }
     }
 
     /**
