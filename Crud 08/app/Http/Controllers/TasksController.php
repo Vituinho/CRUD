@@ -32,9 +32,11 @@ class TasksController extends Controller
     public function store(TasksRequest $request)
     {
         $tasks = Tasks::create([
-            'title' => $request['title'],
-            'description' => $request['description'],
-            'status' => $request['status']
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'status' => $request->boolean('status')
+
+           /* Esses $request->input/boolean serve para marcar ele, mesmo for null ele mostra como o valor que é, mostrando se é boolean e tals, e isso faz o status funcionar pq manda o false caso não esteja marcado */ 
         ]);
 
         if($tasks) {

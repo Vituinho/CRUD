@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tasks extends Model
 {
-    protected $fillable = ['titulo', 'descricao', 'status'];
+    protected $fillable = ['title', 'description', 'status'];
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+    /*faz com que sempre status seja boolean*/
 }
