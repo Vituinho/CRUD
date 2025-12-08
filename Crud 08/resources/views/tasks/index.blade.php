@@ -62,7 +62,7 @@
                                     <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
                                         @csrf @method('DELETE')
 
-                                        <button class="btn btn-danger">Deletar</button>
+                                        <button onclick="return confirm('Tem certeza que deseja excluir esta tarefa?')" class="btn btn-danger">Deletar</button>
                                     </form>
                                 </div>
                                 
