@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tasks;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Http\Requests\TasksRequest;
 
@@ -13,7 +13,7 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks = Tasks::all();
+        $tasks = Task::all();
 
         return view('tasks.index', ['tasks' => $tasks]);
     }
@@ -31,7 +31,7 @@ class TasksController extends Controller
      */
     public function store(TasksRequest $request)
     {
-        $tasks = Tasks::create([
+        $tasks = Task::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'status' => $request->boolean('status')
@@ -49,7 +49,7 @@ class TasksController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(tasks $tasks)
+    public function show(Task $tasks)
     {
         //
     }
@@ -57,24 +57,41 @@ class TasksController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(tasks $tasks)
+    public function edit(Task $task)
     {
-        //
+        return view('tasks.edit', ['task' => $task]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, tasks $tasks)
+    public function update(TasksRequest $request, Task $task)
     {
-        //
+        $update = $task->update([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'status' => $request->boolean('status')
+        ]);
+
+        if($update) {
+            return redirect()->route('tasks.index')->with('success', 'Tarefa editada com sucesso!');
+        } else {
+            return redirect()->route('tasks.index')->with('error', 'Não foi possível editar a tarefa!');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(tasks $tasks)
+    public function destroy(Task $task)
     {
-        //
+        $deletou = $task->delete();
+
+        if ($deletou) {
+            return redirect()->route('tasks.index')->with('success', 'Curso removido com sucesso!!');
+        }
+        else {
+            return redirect()->route('tasks.index')->with('error', 'Não foi possível remover esse curso!!');
+        }
     }
 }
