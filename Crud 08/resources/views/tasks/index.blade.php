@@ -8,10 +8,23 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
+    @if (session('success'))
+    <div class="alert alert-success mt-2 container justify-content-center" role="alert">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div class="alert alert-danger mt-2 container justify-content-center" role="alert">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="d-flex justify-content-between align-items-center my-5 container">
         <h1>Minhas Tarefas</h1>
         <a href="{{ route('tasks.create') }}" class="btn btn-primary">Criar</a>
     </div>
+
+    
 
     @if(count($tasks) == 0)
         <p class="d-flex justify-content-center">Nenhuma tarefa cadastrada</p>

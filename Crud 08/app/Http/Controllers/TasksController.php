@@ -40,7 +40,7 @@ class TasksController extends Controller
         ]);
 
         if($tasks) {
-            return redirect()->route('tasks.index')->with('success', 'Tarefa cadastrado com sucesso!');
+            return redirect()->route('tasks.index')->with('success', 'Tarefa cadastrada com sucesso!');
         } else {
             return redirect()->route('tasks.index')->with('error', 'Não foi possível cadastrar a tarefa!');
         }
@@ -88,10 +88,10 @@ class TasksController extends Controller
         $deletou = $task->delete();
 
         if ($deletou) {
-            return redirect()->route('tasks.index')->with('success', 'Curso removido com sucesso!!');
+            return redirect()->route('tasks.index')->with('success', 'Tarefa removida com sucesso!!');
         }
         else {
-            return redirect()->route('tasks.index')->with('error', 'Não foi possível remover esse curso!!');
+            return redirect()->route('tasks.index')->with('error', 'Não foi possível remover essa tarefa!!');
         }
     }
 }
