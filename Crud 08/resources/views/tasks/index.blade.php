@@ -8,10 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
-    <h1 class="my-5 d-flex justify-content-center">Minhas tarefas</h1>
+    <div class="d-flex justify-content-between align-items-center my-5 container">
+        <h1>Minhas Tarefas</h1>
+        <a href="{{ route('tasks.create') }}" class="btn btn-primary">Criar</a>
+    </div>
 
     @if(count($tasks) == 0)
-        <p>Nenhuma tarefa cadastrada</p>
+        <p class="d-flex justify-content-center">Nenhuma tarefa cadastrada</p>
     @else 
 
         <div class="container">
@@ -19,10 +22,11 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">ID</th>
                             <th scope="col">Título</th>
                             <th scope="col">Descrição</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,6 +41,18 @@
                                 @else 
                                     Concluída
                                 @endif
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-primary">Editar</a>
+                                
+                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
+                                        @csrf @method('DELETE')
+
+                                        <button class="btn btn-danger">Deletar</button>
+                                    </form>
+                                </div>
+                                
                             </td>
                         </tr>
                         @endforeach
